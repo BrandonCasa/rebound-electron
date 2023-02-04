@@ -13,7 +13,6 @@ async function startMongoDevServer() {
       port: 27017,
       dbName: 'rebound',
       dbPath: './mongod/',
-      auth: true,
     },
     binary: {
       version: '6.0.4',
@@ -21,8 +20,7 @@ async function startMongoDevServer() {
   });
 
   await mongod.start();
-  mongod.auth.customRootName = 'myUserAdmin';
-  mongod.auth.customRootPassword = 'myUserAdminPassword';
+
   return mongod;
 }
 
