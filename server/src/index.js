@@ -1,6 +1,6 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import * as dotenv from 'dotenv';
 import express from 'express';
+import dotenv from 'dotenv';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ async function startMongoDevServer() {
     instance: {
       port: 27017,
       dbName: 'rebound',
-      dbPath: './dev/mongod/',
+      dbPath: './mongod/',
       auth: true,
     },
     binary: {
@@ -21,6 +21,9 @@ async function startMongoDevServer() {
   });
 
   await mongod.start();
+  mongod.auth.customRootName = 'myUserAdmin';
+  mongod.auth.customRootPassword = 'myUserAdminPassword';
+  return mongod;
 }
 
 async function initDev() {
