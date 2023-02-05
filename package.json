@@ -211,6 +211,9 @@
       ]
     },
     "win": {
+      "publish": [
+        "github"
+      ],
       "target": [
         "nsis"
       ]
@@ -232,7 +235,8 @@
     "publish": {
       "provider": "github",
       "owner": "BrandonCasa",
-      "repo": "rebound-electron"
+      "repo": "rebound-electron",
+      "releaseType": "release"
     }
   },
   "devEngines": {
