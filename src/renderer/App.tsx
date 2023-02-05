@@ -1,6 +1,8 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
-import './App.css';
+import './App.scss';
+import AppBarCustom from './components/AppBar.comp';
+import LandingPage from './pages/Landing.page';
 
 const Hello = () => {
   return (
@@ -66,8 +68,9 @@ const Hello = () => {
 export default function App() {
   return (
     <Router>
+      <AppBarCustom />
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );
