@@ -20,6 +20,19 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+  store: {
+    // Using unknown to avoid type error, may cause problems
+    get(key: string) {
+      return ipcRenderer.sendSync('electron-store-get', key);
+    },
+    set(key: string, val: unknown) {
+      ipcRenderer.send('electron-store-set', key, val);
+    },
+    // Other method you want to add like has(), reset(), etc.
+    // ...
+  },
+  // Any other methods you want to expose in the window object.
+  // ...
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

@@ -9,6 +9,30 @@ const Hello = () => {
         <img width="200" alt="icon" src={icon} />
       </div>
       <h1>electron-react-boilerplate</h1>
+      <button
+        type="button"
+        onClick={() => {
+          console.log(window.electron.store.get('foo'));
+        }}
+      >
+        Get Value
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          window.electron.store.set('foo', 'bar');
+        }}
+      >
+        Set Value
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          console.log(window.electron);
+        }}
+      >
+        Check Electron
+      </button>
       <div className="Hello">
         <a
           href="https://electron-react-boilerplate.js.org/"
