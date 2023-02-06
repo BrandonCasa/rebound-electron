@@ -22,7 +22,7 @@
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "prepare": "husky install",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
-    "start-web": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:web",
+    "start-web": "ts-node ./.erb/scripts/check-port-in-use-web.js && npm run start:web",
     "start-electron": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
@@ -175,7 +175,7 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ReboundApp",
+    "productName": "Rebound App",
     "appId": "org.bc.ReboundApp",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
