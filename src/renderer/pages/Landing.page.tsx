@@ -22,7 +22,7 @@ export default function LandingPage() {
   return (
     <Box>
       {filteredTodos.map((item, index) => (
-        <TodoItem key={index} item={item} index={index} />
+        <TodoItem key={`${item}-${index + 1}`} item={item} index={index} />
       ))}
       <Button variant="contained" onClick={addTodo}>
         Add Todo
