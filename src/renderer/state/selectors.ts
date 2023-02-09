@@ -9,7 +9,8 @@ interface TodoList {
 export const filteredTodoListState = selector<Todo[]>({
   key: 'filteredTodoListState',
   get: ({ get }) => {
-    const { filter, todos } = get<TodoList>(todoListState);
+    const todos = get<Todo[]>(todoListState);
+    const filter = get<string>(todoListFilterState);
 
     switch (filter) {
       case 'completed':
