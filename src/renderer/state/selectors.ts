@@ -31,7 +31,7 @@ interface User {
 export const currentUserNameQuery = selector<string>({
   key: 'CurrentUserName',
   get: async ({ get }) => {
-    const response = await fetch(`https://api.github.com/users/ozcanzaferayan`);
+    const response = await fetch(`https://api.github.com/users/BrandonCasa`);
     if (!response.ok) {
       throw new Error(`Error fetching user: ${response.statusText}`);
     }
