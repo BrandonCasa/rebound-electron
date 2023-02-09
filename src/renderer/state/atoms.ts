@@ -12,14 +12,13 @@ export const todoListState = atom<Todo[]>({
     { name: 'Eggs', isCompleted: false },
     { name: 'Butter', isCompleted: false },
   ],
-});
-
-export const todoListState2 = atom<Todo[]>({
-  key: 'todoListState2',
-  default: [
-    { name: 'Apples', isCompleted: false },
-    { name: 'Eggs', isCompleted: false },
-    { name: 'Butter', isCompleted: false },
+  effects: [
+    ({ onSet }) => {
+      onSet((newState) => {
+        console.log('New Todos:', newState);
+        window.electron.store.set('recoil-todoList-state', newState);
+      });
+    },
   ],
 });
 

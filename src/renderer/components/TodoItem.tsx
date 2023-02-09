@@ -26,10 +26,9 @@ const TodoItem: FunctionComponent<TodoItemProps> = ({ item, index }) => {
     const todos = [...todoList];
     const todo = todoList[editIndex];
     // eslint-disable-next-line no-alert
-    const namePrompt = window.prompt('Change item name', todo.name);
+    const namePrompt = prompt('Change item name', todo.name);
     if (namePrompt !== null) {
-      todos[editIndex] = { ...todo };
-      todos[editIndex].name = namePrompt;
+      todos[editIndex] = { ...todo, name: namePrompt };
       setTodoList(todos);
     }
   };

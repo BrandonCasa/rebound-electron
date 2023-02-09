@@ -1,9 +1,32 @@
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import TodoItem from 'renderer/components/TodoItem';
+import { Todo, todoListState } from 'renderer/state/atoms';
 import { filteredTodoListState } from '../state/selectors';
 
 export default function LandingPage() {
-  const filteredTodos = useRecoilValue(filteredTodoListState);
+  const filteredTodos = useRecoilValue<Todo[]>(filteredTodoListState);
+  const [todoList, setTodoList] = useRecoilState<Todo[]>(todoListState);
 
-  return <Box>{JSON.stringify(filteredTodos)}</Box>;
+  const addTodo = () => {
+    const todos = [...todoList];
+    const todo = {
+      name: 'New Todo',
+      isCompleted: false,
+    };
+    todos.push(todo);
+    setTodoList(todos);
+  };
+
+  return (
+    <Box>
+      {filteredTodos.map((item, index) => (
+        <TodoItem key={index} item={item} index={index} />
+      ))}
+      <Button variant="contained" onClick={addTodo}>
+        Add Todo
+      </Button>
+    </Box>
+  );
 }

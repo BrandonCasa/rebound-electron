@@ -4,12 +4,14 @@ import {
   selector,
   useRecoilState,
   useRecoilValue,
+  MutableSnapshot,
 } from 'recoil';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppBarCustom from './components/AppBar.comp';
 import LandingPage from './pages/Landing.page';
 import icon from '../../assets/icon.svg';
 import './App.scss';
+import { todoListState } from './state/atoms';
 
 const Hello = () => {
   return (
@@ -73,8 +75,33 @@ const Hello = () => {
 };
 
 export default function App() {
+  const isElectron = window.electron && window.electron.ipcRenderer;
+  let defaultRecoilState;
+
+  // Pull from web after both of these
+  if (isElectron) {
+    // Construct the default state for the app from the electron-store
+    defaultRecoilState = (snapshot: MutableSnapshot) => {
+      snapshot.set(
+        todoListState,
+        window.electron.store.get('recoil-todoList-state') || []
+      );
+    };
+  } else {
+    defaultRecoilState = (snapshot: MutableSnapshot) => {
+      snapshot.set(todoListState, [
+        {
+          name: 'My first todo',
+          isCompleted: false,
+        },
+      ]);
+    };
+  }
+
   return (
-    <RecoilRoot>
+    <RecoilRoot
+      initializeState={isElectron ? defaultRecoilState : defaultRecoilState}
+    >
       <Router>
         <AppBarCustom />
         <Routes>
