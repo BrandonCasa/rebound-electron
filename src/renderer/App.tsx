@@ -1,8 +1,15 @@
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.scss';
 import AppBarCustom from './components/AppBar.comp';
 import LandingPage from './pages/Landing.page';
+import icon from '../../assets/icon.svg';
+import './App.scss';
 
 const Hello = () => {
   return (
@@ -67,11 +74,13 @@ const Hello = () => {
 
 export default function App() {
   return (
-    <Router>
-      <AppBarCustom />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-      </Routes>
-    </Router>
+    <RecoilRoot>
+      <Router>
+        <AppBarCustom />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
+      </Router>
+    </RecoilRoot>
   );
 }
