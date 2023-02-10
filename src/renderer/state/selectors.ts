@@ -1,26 +1,15 @@
 import { selector } from 'recoil';
-import { todoListFilterState, todoListState, Todo } from './atoms';
+import { todoListState, Todo } from './atoms';
 
 interface TodoList {
   todos: Todo[];
-  filter: string;
 }
 
 export const filteredTodoListState = selector<Todo[]>({
   key: 'filteredTodoListState',
   get: ({ get }) => {
     const todos = get<Todo[]>(todoListState);
-    const filter = get<string>(todoListFilterState);
-
-    switch (filter) {
-      case 'completed':
-        return todos.filter((item) => item.isCompleted);
-      case 'uncompleted':
-        return todos.filter((item) => !item.isCompleted);
-      default:
-        // all
-        return todos;
-    }
+    return todos;
   },
 });
 

@@ -9,15 +9,10 @@ export interface Todo {
 
 export const todoListState = atom<Todo[]>({
   key: 'todoListState',
-  default: [
-    { name: 'Apples', isCompleted: false },
-    { name: 'Eggs', isCompleted: false },
-    { name: 'Butter', isCompleted: false },
-  ],
+  default: [],
   effects: [
     ({ onSet }) => {
       onSet((newState) => {
-        console.log('New Todos:', newState);
         if (isElectron) {
           window.electron.store.set('recoil-todoList-state', newState);
         } else {
@@ -29,9 +24,4 @@ export const todoListState = atom<Todo[]>({
       });
     },
   ],
-});
-
-export const todoListFilterState = atom<string>({
-  key: 'todoListFilterState',
-  default: 'Hepsini göster',
 });

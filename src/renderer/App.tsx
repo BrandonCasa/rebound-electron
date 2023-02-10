@@ -13,6 +13,10 @@ import AppBarCustom from './components/AppBar.comp';
 import LandingPage from './pages/Landing.page';
 import icon from '../../assets/icon.svg';
 import './App.scss';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 import { todoListState } from './state/atoms';
 
 declare module '@mui/material/styles' {
@@ -47,7 +51,7 @@ const defaultRecoilState = (snapshot: MutableSnapshot) => {
     // use localstorage
     snapshot.set(
       todoListState,
-      JSON.parse(localStorage.getItem('recoil-todoList-state')) || []
+      JSON.parse(localStorage.getItem('recoil-todoList-state') || '[]')
     );
   }
 };
