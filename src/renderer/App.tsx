@@ -8,66 +8,33 @@ import {
 } from 'recoil';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
+import { Button, CssBaseline } from '@mui/material';
 import AppBarCustom from './components/AppBar.comp';
 import LandingPage from './pages/Landing.page';
-import icon from '../../assets/icon.svg';
 import './App.scss';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { todoListState } from './state/atoms';
-
-declare module '@mui/material/styles' {
-  interface Theme {
-    palette: {
-      mode: string;
-    };
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    palette?: {
-      mode?: string;
-    };
-  }
-}
-// Dark mode
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
-const isElectron = !!(window.electron && window.electron.ipcRenderer);
-
-const defaultRecoilState = (snapshot: MutableSnapshot) => {
-  if (isElectron) {
-    snapshot.set(
-      todoListState,
-      window.electron.store.get('recoil-todoList-state') || []
-    );
-  } else {
-    // use localstorage
-    snapshot.set(
-      todoListState,
-      JSON.parse(localStorage.getItem('recoil-todoList-state') || '[]')
-    );
-  }
-};
+import { AuthState, authStateAtom } from './state/atomsNew';
+import authStateSelector from './state/selectorsNew';
 
 export default function App() {
+  const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
+
   return (
-    <RecoilRoot initializeState={defaultRecoilState}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <AppBarCustom />
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-          </Routes>
-        </Router>
-      </ThemeProvider>
-    </RecoilRoot>
+    <Router>
+      <AppBarCustom />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+      <Button
+        variant="contained"
+        onClick={() => setAuthState({ isAuthenticated: true })}
+      >
+        Login
+      </Button>
+      {JSON.stringify(authState)}
+    </Router>
   );
 }

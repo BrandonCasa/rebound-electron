@@ -1,11 +1,7 @@
 import { selector } from 'recoil';
 import { todoListState, Todo } from './atoms';
 
-interface TodoList {
-  todos: Todo[];
-}
-
-export const filteredTodoListState = selector<Todo[]>({
+const filteredTodoListState = selector<Todo[]>({
   key: 'filteredTodoListState',
   get: ({ get }) => {
     const todos = get<Todo[]>(todoListState);
@@ -13,18 +9,4 @@ export const filteredTodoListState = selector<Todo[]>({
   },
 });
 
-interface User {
-  name: string;
-}
-
-export const currentUserNameQuery = selector<string>({
-  key: 'CurrentUserName',
-  get: async ({ get }) => {
-    const response = await fetch(`https://api.github.com/users/BrandonCasa`);
-    if (!response.ok) {
-      throw new Error(`Error fetching user: ${response.statusText}`);
-    }
-    const json = (await response.json()) as User;
-    return json.name;
-  },
-});
+export default filteredTodoListState;
