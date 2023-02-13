@@ -41,7 +41,7 @@ export default function TestApiPage() {
               >
                 State: Auth
               </Box>
-              <Box component="ul" aria-labelledby="category-a" sx={{ pl: 2 }}>
+              <Box component="ul" sx={{ pl: 2 }}>
                 {Object.keys(authState).map((key, index) => (
                   <li key={key}>{`${key}: ${
                     Object.values(authState)[index]
@@ -58,7 +58,7 @@ export default function TestApiPage() {
               >
                 State: 2
               </Box>
-              <Box component="ul" aria-labelledby="category-b" sx={{ pl: 2 }}>
+              <Box component="ul" sx={{ pl: 2 }}>
                 <li>Value 1</li>
                 <li>Value 2</li>
                 <li>Value 3</li>
@@ -73,7 +73,7 @@ export default function TestApiPage() {
               >
                 State: 3
               </Box>
-              <Box component="ul" aria-labelledby="category-c" sx={{ pl: 2 }}>
+              <Box component="ul" sx={{ pl: 2 }}>
                 <li>Value 1</li>
                 <li>Value 2</li>
                 <li>Value 3</li>
@@ -88,7 +88,7 @@ export default function TestApiPage() {
               >
                 State: 4
               </Box>
-              <Box component="ul" aria-labelledby="category-d" sx={{ pl: 2 }}>
+              <Box component="ul" sx={{ pl: 2 }}>
                 <li>Value 1</li>
                 <li>Value 2</li>
                 <li>Value 3</li>
@@ -112,7 +112,11 @@ export default function TestApiPage() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  !authState.isAuthenticated ? handleLogin() : handleLogout();
+                  if (!authState.isAuthenticated) {
+                    handleLogin();
+                  } else {
+                    handleLogout();
+                  }
                 }}
               >
                 {!authState.isAuthenticated ? 'Login' : 'Logout'}
