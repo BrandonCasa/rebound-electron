@@ -30,8 +30,11 @@ const constructDefaultState = (stateName: string, stateFallback: unknown) => {
 };
 
 const defaultRecoilState = (snapshot: MutableSnapshot) => {
+  // Todo List State
   const todoListDefault = constructDefaultState('recoil-todoList-state', []);
   snapshot.set(todoListState, todoListDefault);
+
+  // Auth State
   const authDefault = constructDefaultState('recoil-auth-state', {
     isAuthenticated: false,
   });

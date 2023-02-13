@@ -12,12 +12,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate } from 'react-router-dom';
 import iconImage from '../../../assets/icon.png';
 
-const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function AppBarCustom() {
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -32,7 +34,10 @@ function AppBarCustom() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (newHref: string | null) => {
+    if (newHref) {
+      navigate(newHref);
+    }
     setAnchorElNav(null);
   };
 
@@ -87,28 +92,27 @@ function AppBarCustom() {
               horizontal: 'left',
             }}
             open={Boolean(anchorElNav)}
-            onClose={handleCloseNavMenu}
+            onClose={() => handleCloseNavMenu(null)}
             sx={{
               display: { xs: 'block', md: 'none' },
             }}
           >
-            {pages.map((page) => (
-              <MenuItem key={page} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">{page}</Typography>
-              </MenuItem>
-            ))}
+            <MenuItem
+              key="Test API"
+              onClick={() => handleCloseNavMenu('/testapi')}
+            >
+              <Typography textAlign="center">Test API</Typography>
+            </MenuItem>
           </Menu>
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {pages.map((page) => (
-            <Button
-              key={page}
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              {page}
-            </Button>
-          ))}
+          <Button
+            key="Test API"
+            onClick={() => handleCloseNavMenu('/testapi')}
+            sx={{ my: 2, color: 'white', display: 'block' }}
+          >
+            Test API
+          </Button>
         </Box>
 
         <Box sx={{ flexGrow: 0 }}>
