@@ -29,12 +29,12 @@ export default function TestApiPage() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid xs={12} md={5} lg={4}>
-          <Item>Current State Section</Item>
+        <Grid xs={12} md={4} lg={3}>
+          <Item>Web State Dashboard</Item>
         </Grid>
-        <Grid container xs={12} md={7} lg={8} spacing={4}>
+        <Grid container xs={12} md={8} lg={9} spacing={2} alignItems="stretch">
           <Grid xs={6} lg={3}>
-            <Item>
+            <Item sx={{ height: '100%' }}>
               <Box
                 id="category-a"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
@@ -49,7 +49,7 @@ export default function TestApiPage() {
             </Item>
           </Grid>
           <Grid xs={6} lg={3}>
-            <Item>
+            <Item sx={{ height: '100%' }}>
               <Box
                 id="category-b"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
@@ -64,7 +64,7 @@ export default function TestApiPage() {
             </Item>
           </Grid>
           <Grid xs={6} lg={3}>
-            <Item>
+            <Item sx={{ height: '100%' }}>
               <Box
                 id="category-c"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
@@ -79,7 +79,7 @@ export default function TestApiPage() {
             </Item>
           </Grid>
           <Grid xs={6} lg={3}>
-            <Item>
+            <Item sx={{ height: '100%' }}>
               <Box
                 id="category-d"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
