@@ -42,8 +42,10 @@ export default function TestApiPage() {
                 State: Auth
               </Box>
               <Box component="ul" aria-labelledby="category-a" sx={{ pl: 2 }}>
-                {Object.keys(authState).map((key) => (
-                  <li key={key}>{`${key}: ${authState[key]}`}</li>
+                {Object.keys(authState).map((key, index) => (
+                  <li key={key}>{`${key}: ${
+                    Object.values(authState)[index]
+                  }`}</li>
                 ))}
               </Box>
             </Item>
