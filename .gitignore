@@ -29,3 +29,4 @@ npm-debug.log.*
 *.scss.d.tools
 server/.env
 server/mongod/
+cordova/**/*

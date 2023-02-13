@@ -1,7 +1,7 @@
 {
   "name": "rebound-app",
   "description": "Rebound App",
-  "homepage": "https://reboundapp.tv/",
+  "homepage": ".",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BrandonCasa/rebound-electron.git"
@@ -17,6 +17,7 @@
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
+    "cordova": "npm run build && cp -r ./release/app/dist/renderer ./cordova/www/rebound",
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
