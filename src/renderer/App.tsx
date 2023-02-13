@@ -24,14 +24,16 @@ export default function App() {
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
 
   return (
-    <Router>
-      <AppBarCustom />
-      <Box sx={{ flexGrow: 1, padding: 2 }}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/testapi" element={<TestApiPage />} />
-        </Routes>
-      </Box>
-    </Router>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Router>
+        <AppBarCustom />
+        <Box sx={{ flexGrow: 1, padding: 2, display: 'flex' }}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/testapi" element={<TestApiPage />} />
+          </Routes>
+        </Box>
+      </Router>
+    </Box>
   );
 }
