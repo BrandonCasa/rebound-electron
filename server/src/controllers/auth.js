@@ -4,8 +4,12 @@ import { User } from '../models/User.js';
 
 // Register a new user
 export async function register(req, res) {
+  if (Array.isArray(req.body)) {
+    req.body = req.body[0];
+  }
   try {
     const { displayname, username, email, password, interests } = req.body;
+    console.log(displayname, username, email, password, interests)
     const registeredUser = await User.register(
       { displayname, username, email, interests },
       password
@@ -32,6 +36,9 @@ export async function register(req, res) {
 
 // A method to login a user and return their data
 export async function login(req, res) {
+  if (Array.isArray(req.body)) {
+    req.body = req.body[0];
+  }
   try {
     passport.authenticate(
       'local',

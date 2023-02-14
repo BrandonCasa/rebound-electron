@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material';
 import App from './App';
 import { todoListState } from './state/atoms';
 import { authStateAtom } from './state/atomsNew';
+import type {} from '@mui/lab/themeAugmentation';
 
 // Dark mode
 const theme = createTheme({
