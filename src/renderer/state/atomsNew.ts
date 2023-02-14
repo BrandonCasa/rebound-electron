@@ -10,7 +10,7 @@ export interface AuthState {
     displayname: string;
     username: string;
     email: string;
-    avatar: string;
+    avatar: string | null;
     friends: string[];
     aboutMe: string;
     createdAt: string;

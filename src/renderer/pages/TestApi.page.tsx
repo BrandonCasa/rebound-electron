@@ -1,15 +1,17 @@
+/* eslint-disable no-console */
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { AuthState, authStateAtom } from 'renderer/state/atomsNew';
 import { useRecoilState } from 'recoil';
-import { Button, Typography } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { TreeView } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
+import { ChangeEvent, useState } from 'react';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -21,6 +23,12 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function TestApiPage() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [displayname, setDisplayname] = useState('');
+  const [email, setEmail] = useState('');
+  const [interests, setInterests] = useState<string[]>([]);
 
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
 
@@ -45,7 +53,7 @@ export default function TestApiPage() {
     });
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (usernameVal: string, passwordVal: string) => {
     const options = {
       method: 'POST',
       url: isDev
@@ -56,8 +64,8 @@ export default function TestApiPage() {
       },
       data: [
         {
-          username: 'testusername1',
-          password: 'testpassword1',
+          username: usernameVal,
+          password: passwordVal,
         },
       ],
     };
@@ -73,11 +81,11 @@ export default function TestApiPage() {
   };
 
   const handleRegister = async (
-    username: string,
-    password: string,
-    displayname: string,
-    email: string,
-    interests: string[]
+    usernameVal: string,
+    passwordVal: string,
+    displaynameVal: string,
+    emailVal: string,
+    interestsVal: string[]
   ) => {
     const options = {
       method: 'POST',
@@ -89,11 +97,11 @@ export default function TestApiPage() {
       },
       data: [
         {
-          displayname,
-          username,
-          email,
-          password,
-          interests,
+          displaynameVal,
+          usernameVal,
+          emailVal,
+          passwordVal,
+          interestsVal,
         },
       ],
     };
@@ -128,7 +136,7 @@ export default function TestApiPage() {
               <Box sx={{ fontSize: '12px', textTransform: 'uppercase' }}>
                 State: Auth
               </Box>
-              <Box component="ul" sx={{ pl: 2 }}>
+              <Box component="ul" sx={{ padding: 2, margin: 0 }}>
                 <TreeView
                   defaultCollapseIcon={<ExpandMoreIcon />}
                   defaultExpandIcon={<ChevronRightIcon />}
@@ -251,7 +259,13 @@ export default function TestApiPage() {
               >
                 State: 2
               </Box>
-              <Box component="ul" sx={{ pl: 2 }}>
+              <Box
+                component="ul"
+                sx={{
+                  padding: 2,
+                  margin: 0,
+                }}
+              >
                 <li>Value 1</li>
                 <li>Value 2</li>
                 <li>Value 3</li>
@@ -261,30 +275,99 @@ export default function TestApiPage() {
           <Grid xs={6}>
             <Item sx={{ height: '100%' }}>
               <Box
-                id="category-c"
+                id="required-fields"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
               >
-                State: 3
+                Required Fields
               </Box>
-              <Box component="ul" sx={{ pl: 2 }}>
-                <li>Value 1</li>
-                <li>Value 2</li>
-                <li>Value 3</li>
+              <Box
+                component="form"
+                sx={{
+                  padding: 2,
+                  margin: 0,
+                }}
+                noValidate
+                autoComplete="off"
+                onChange={(e: unknown) => {
+                  const event = e as React.ChangeEvent<HTMLInputElement>;
+                  if (event.target.id === 'Username Field') {
+                    setUsername(event.target.value);
+                  } else if (event.target.id === 'Password Field') {
+                    setPassword(event.target.value);
+                  } else {
+                    console.log('Error');
+                  }
+                }}
+              >
+                <TextField
+                  fullWidth
+                  id="Username Field"
+                  label="Username"
+                  variant="outlined"
+                />
+                <TextField
+                  sx={{ marginTop: 2 }}
+                  fullWidth
+                  id="Password Field"
+                  label="Password"
+                  variant="outlined"
+                />
               </Box>
             </Item>
           </Grid>
           <Grid xs={6}>
             <Item sx={{ height: '100%' }}>
               <Box
-                id="category-d"
+                id="register-fields"
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
               >
-                State: 4
+                Registration Fields
               </Box>
-              <Box component="ul" sx={{ pl: 2 }}>
-                <li>Value 1</li>
-                <li>Value 2</li>
-                <li>Value 3</li>
+              <Box
+                component="form"
+                sx={{
+                  padding: 2,
+                  margin: 0,
+                }}
+                noValidate
+                autoComplete="off"
+                onChange={(e: unknown) => {
+                  const event = e as React.ChangeEvent<HTMLInputElement>;
+                  if (event.target.id === 'Email Field') {
+                    setEmail(event.target.value);
+                  } else if (event.target.id === 'Display Name Field') {
+                    setDisplayname(event.target.value);
+                  } else if (event.target.id === 'Interests Field') {
+                    let interestsVal = event.target.value.split(',');
+                    interestsVal = interestsVal.map((interest) =>
+                      interest.trim()
+                    );
+                    setInterests(interestsVal);
+                  } else {
+                    console.log('Error');
+                  }
+                }}
+              >
+                <TextField
+                  fullWidth
+                  id="Display Name Field"
+                  label="Display Name"
+                  variant="outlined"
+                />
+                <TextField
+                  sx={{ marginTop: 2 }}
+                  fullWidth
+                  id="Email Field"
+                  label="Email"
+                  variant="outlined"
+                />
+                <TextField
+                  sx={{ marginTop: 2 }}
+                  fullWidth
+                  id="Interests Field"
+                  label="Interests"
+                  variant="outlined"
+                />
               </Box>
             </Item>
           </Grid>
@@ -306,7 +389,7 @@ export default function TestApiPage() {
                 variant="contained"
                 onClick={() => {
                   if (!authState.isAuthenticated) {
-                    handleLogin();
+                    handleLogin(username, password);
                   } else {
                     handleLogout();
                   }
@@ -321,11 +404,11 @@ export default function TestApiPage() {
                   variant="contained"
                   onClick={() => {
                     handleRegister(
-                      'testusername1',
-                      'testpassword1',
-                      'testdisplayname1',
-                      'email@email.email',
-                      ['testinterest1', 'testinterest2']
+                      username,
+                      password,
+                      displayname,
+                      email,
+                      interests
                     );
                   }}
                 >
