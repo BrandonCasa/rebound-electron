@@ -13,10 +13,10 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 import { ChangeEvent, useState } from 'react';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
 
-  return <Box sx={{ flexGrow: 1 }}>Login Page</Box>;
+  return <Box sx={{ flexGrow: 1 }}>Register Page</Box>;
 }

@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { AuthState, authStateAtom } from 'renderer/state/atomsNew';
 import { useRecoilState } from 'recoil';
-import { Button, TextField } from '@mui/material';
+import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { TreeView } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -29,6 +29,8 @@ export default function TestApiPage() {
   const [displayname, setDisplayname] = useState('');
   const [email, setEmail] = useState('');
   const [interests, setInterests] = useState<string[]>([]);
+
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
 
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
 
@@ -294,8 +296,10 @@ export default function TestApiPage() {
                     setUsername(event.target.value);
                   } else if (event.target.id === 'Password Field') {
                     setPassword(event.target.value);
+                  } else if (event.target.id === 'Stay Logged In') {
+                    setStayLoggedIn(!stayLoggedIn);
                   } else {
-                    console.log('Error');
+                    console.log('Error on Login Fields');
                   }
                 }}
               >
@@ -312,6 +316,10 @@ export default function TestApiPage() {
                   label="Password"
                   variant="outlined"
                 />
+                <Typography>
+                  Stay Logged In:
+                  <Checkbox id="Stay Logged In" checked={stayLoggedIn} />
+                </Typography>
               </Box>
             </Item>
           </Grid>
@@ -344,7 +352,7 @@ export default function TestApiPage() {
                     );
                     setInterests(interestsVal);
                   } else {
-                    console.log('Error');
+                    console.log('Error on Register Fields');
                   }
                 }}
               >

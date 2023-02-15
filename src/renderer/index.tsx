@@ -52,7 +52,7 @@ root.render(
     </ThemeProvider>
   </RecoilRoot>
 );
-
+/*
 if (isElectron) {
   // calling IPC exposed from preload script
   window.electron.ipcRenderer.once('ipc-example', (arg) => {
@@ -61,3 +61,4 @@ if (isElectron) {
   });
   window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
 }
+*/
