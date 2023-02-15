@@ -58,7 +58,7 @@ export default function TestApiPage() {
       method: 'POST',
       url: isDev
         ? 'http://localhost:6001/api/auth/login'
-        : 'https://reboundapp.tv/api/auth/register',
+        : 'https://reboundapp.tv/api/auth/login',
       headers: {
         'content-type': 'application/json',
       },
