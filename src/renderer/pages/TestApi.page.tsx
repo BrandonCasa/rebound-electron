@@ -97,11 +97,11 @@ export default function TestApiPage() {
       },
       data: [
         {
-          displaynameVal,
-          usernameVal,
-          emailVal,
-          passwordVal,
-          interestsVal,
+          displayname: displaynameVal,
+          username: usernameVal,
+          email: emailVal,
+          password: passwordVal,
+          interests: interestsVal,
         },
       ],
     };

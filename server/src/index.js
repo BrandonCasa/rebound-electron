@@ -24,18 +24,6 @@ dotenv.config();
 const fileName = fileURLToPath(import.meta.url);
 const dirName = path.dirname(fileName);
 
-const mongodbDev = await MongoMemoryServer.create({
-  instance: {
-    port: 27017,
-    dbName: 'rebound',
-    dbPath: './mongod/',
-    auth: false,
-  },
-  binary: {
-    version: '6.0.4',
-  },
-});
-
 const app = express();
 
 const logger = winston.createLogger({
@@ -89,13 +77,27 @@ app.use('/api/user', userRoutes);
 
 async function initDev() {
   if (process.env.NODE_ENV === 'development') {
+    const mongodbDev = await MongoMemoryServer.create({
+      instance: {
+        port: 27017,
+        dbName: 'rebound',
+        dbPath: './mongod/',
+        auth: false,
+      },
+      binary: {
+        version: '6.0.4',
+      },
+    });
     await mongodbDev.stop();
     await mongodbDev.start(true);
+    return mongodbDev;
+  } else {
+    return null;
   }
 }
 
 async function startServer() {
-  await initDev();
+  const mongodbDev = await initDev();
 
   // Mongoose Setup
   const PORT = process.env.PORT || 6001;
@@ -111,6 +113,7 @@ async function startServer() {
       authSource: 'admin',
     };
   }
+  await mongoose.set('strictQuery', true);
   await mongoose.connect(`${connectString}rebound?w=majority`, {
     retryWrites: true,
     retryReads: true,
