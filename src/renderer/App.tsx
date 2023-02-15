@@ -19,6 +19,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { AuthState, authStateAtom } from './state/atomsNew';
 import TestApiPage from './pages/TestApi.page';
+import LoginPage from './pages/Login.page';
 
 export default function App() {
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
@@ -31,6 +32,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/testapi" element={<TestApiPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </Box>
       </Router>
