@@ -5,13 +5,23 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import { AuthState, authStateAtom } from 'renderer/state/atomsNew';
 import { useRecoilState } from 'recoil';
-import { Button, Checkbox, TextField, Typography } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import {
+  Button,
+  Checkbox,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { TreeView } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import TreeItem from '@mui/lab/TreeItem';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,9 +40,80 @@ export default function TestApiPage() {
   const [email, setEmail] = useState('');
   const [interests, setInterests] = useState<string[]>([]);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [runningRequest, setRunningRequest] = useState(false);
+  const [registerTooltip, setRegisterTooltip] = useState('');
+  const [loginTooltip, setLoginTooltip] = useState('');
+
+  const [loginError, setLoginError] = useState('');
+  const [registerError, setRegisterError] = useState('');
+
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
 
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
+
+  React.useEffect(() => {
+    let registerText = '';
+    let loginText = '';
+    if (username === '') {
+      registerText += 'Username';
+      loginText += 'Username';
+    }
+    if (password === '') {
+      if (registerText !== '') {
+        registerText += ', ';
+      }
+      if (loginText !== '') {
+        loginText += ', ';
+      }
+      registerText += 'Password';
+      loginText += 'Password';
+    }
+    if (displayname === '') {
+      if (registerText !== '') {
+        registerText += ', ';
+      }
+      registerText += 'Display Name';
+    }
+    if (email === '') {
+      if (registerText !== '') {
+        registerText += ', ';
+      }
+      registerText += 'Email';
+    }
+    if (interests.length === 0) {
+      if (registerText !== '') {
+        registerText += ', ';
+      }
+      registerText += 'Interests';
+    }
+
+    if (registerText.includes(', ')) {
+      registerText += ' are required.';
+    } else if (registerText !== '') {
+      registerText += ' is required.';
+    }
+
+    if (loginText.includes(', ')) {
+      loginText += ' are required.';
+    } else if (loginText !== '') {
+      loginText += ' is required.';
+    }
+
+    if (runningRequest) {
+      if (registerText !== '') {
+        registerText += ' ';
+      }
+      if (loginText !== '') {
+        loginText += ' ';
+      }
+      registerText += 'App is busy.';
+      loginText += 'App is busy.';
+    }
+    setRegisterTooltip(registerText);
+    setLoginTooltip(loginText);
+  }, [username, password, displayname, email, interests, runningRequest]);
 
   const login = async (response: AxiosResponse) => {
     const { user } = response.data;
@@ -56,6 +137,7 @@ export default function TestApiPage() {
   };
 
   const handleLogin = async (usernameVal: string, passwordVal: string) => {
+    setRunningRequest(true);
     const options = {
       method: 'POST',
       url: isDev
@@ -76,10 +158,16 @@ export default function TestApiPage() {
       if (response.data.user) {
         login(response);
       }
-      return;
-    } catch (error) {
-      console.error(error);
+    } catch (error: AxiosError | unknown) {
+      if (error instanceof AxiosError && error.response?.data.error) {
+        setLoginError(error.response.data.error);
+        console.error(error.response.data.error);
+      } else {
+        setLoginError('Unknown error');
+        console.error(error);
+      }
     }
+    setRunningRequest(false);
   };
 
   const handleRegister = async (
@@ -89,6 +177,7 @@ export default function TestApiPage() {
     emailVal: string,
     interestsVal: string[]
   ) => {
+    setRunningRequest(true);
     const options = {
       method: 'POST',
       url: isDev
@@ -112,14 +201,16 @@ export default function TestApiPage() {
       if (response.data.user) {
         login(response);
       }
-      return;
     } catch (error: AxiosError | unknown) {
       if (error instanceof AxiosError && error.response?.data.error) {
+        setRegisterError(error.response.data.error);
         console.error(error.response.data.error);
       } else {
+        setRegisterError('Unknown error');
         console.error(error);
       }
     }
+    setRunningRequest(false);
   };
 
   const handleLogout = () => {
@@ -283,6 +374,13 @@ export default function TestApiPage() {
                 Required Fields
               </Box>
               <Box
+                id="required-fields"
+                sx={{ fontSize: '12px', color: 'red' }}
+                display={loginError !== '' ? 'block' : 'none'}
+              >
+                Error: {loginError}
+              </Box>
+              <Box
                 component="form"
                 sx={{
                   padding: 2,
@@ -315,9 +413,27 @@ export default function TestApiPage() {
                   id="Password Field"
                   label="Password"
                   variant="outlined"
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    // <-- This is where the toggle button is added.
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          onMouseDown={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <Typography>
-                  Stay Logged In:
+                  Stay Logged In (WIP):
                   <Checkbox id="Stay Logged In" checked={stayLoggedIn} />
                 </Typography>
               </Box>
@@ -330,6 +446,13 @@ export default function TestApiPage() {
                 sx={{ fontSize: '12px', textTransform: 'uppercase' }}
               >
                 Registration Fields
+              </Box>
+              <Box
+                id="required-fields"
+                sx={{ fontSize: '12px', color: 'red' }}
+                display={registerError !== '' ? 'block' : 'none'}
+              >
+                Error: {registerError}
               </Box>
               <Box
                 component="form"
@@ -393,35 +516,57 @@ export default function TestApiPage() {
           </Grid>
           <Grid container columnSpacing={1} sx={{ order: { xs: 1, sm: 2 } }}>
             <Grid>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (!authState.isAuthenticated) {
-                    handleLogin(username, password);
-                  } else {
-                    handleLogout();
-                  }
-                }}
-              >
-                {!authState.isAuthenticated ? 'Login' : 'Logout'}
-              </Button>
-            </Grid>
-            {!authState.isAuthenticated && (
-              <Grid>
+              <Tooltip title={loginTooltip}>
                 <Button
                   variant="contained"
                   onClick={() => {
-                    handleRegister(
-                      username,
-                      password,
-                      displayname,
-                      email,
-                      interests
-                    );
+                    if (!authState.isAuthenticated) {
+                      if (username === '' || password === '') {
+                        setLoginError('Please fill out all fields');
+                      } else if (runningRequest) {
+                        setLoginError('Please wait for current request');
+                      } else {
+                        handleLogin(username, password);
+                      }
+                    } else {
+                      handleLogout();
+                    }
                   }}
                 >
-                  Register
+                  {!authState.isAuthenticated ? 'Login' : 'Logout'}
                 </Button>
+              </Tooltip>
+            </Grid>
+            {!authState.isAuthenticated && (
+              <Grid>
+                <Tooltip title={registerTooltip}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (
+                        username === '' ||
+                        password === '' ||
+                        displayname === '' ||
+                        email === '' ||
+                        interests.length === 0
+                      ) {
+                        setRegisterError('Please fill out all fields');
+                      } else if (runningRequest) {
+                        setRegisterError('Please wait for current request');
+                      } else {
+                        handleRegister(
+                          username,
+                          password,
+                          displayname,
+                          email,
+                          interests
+                        );
+                      }
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Tooltip>
               </Grid>
             )}
             <Grid>
