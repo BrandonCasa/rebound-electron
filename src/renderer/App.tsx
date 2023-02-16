@@ -6,7 +6,7 @@ import {
   useRecoilValue,
   MutableSnapshot,
 } from 'recoil';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import { Button, CssBaseline } from '@mui/material';
 import { Box } from '@mui/system';
@@ -23,11 +23,30 @@ import LoginPage from './pages/Login.page';
 import RegisterPage from './pages/Register.page';
 
 export default function App() {
+  const isElectron = !!(window.electron && window.electron.ipcRenderer);
+
   const [authState, setAuthState] = useRecoilState<AuthState>(authStateAtom);
 
+  if (isElectron) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <MemoryRouter>
+          <AppBarCustom />
+          <Box sx={{ flexGrow: 1, padding: 2, display: 'flex' }}>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/testapi" element={<TestApiPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Routes>
+          </Box>
+        </MemoryRouter>
+      </Box>
+    );
+  }
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <Router>
+      <BrowserRouter>
         <AppBarCustom />
         <Box sx={{ flexGrow: 1, padding: 2, display: 'flex' }}>
           <Routes>
@@ -37,7 +56,7 @@ export default function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </Box>
-      </Router>
+      </BrowserRouter>
     </Box>
   );
 }
